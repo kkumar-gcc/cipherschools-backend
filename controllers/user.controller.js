@@ -156,4 +156,37 @@ updateInterest = async (req, res) => {
   }
 };
 
-module.exports = { addFollower, resetPassword, updateInterest, updateUser };
+getFollowers = async (req, res) => {
+  try {
+    const { page, limit } = req.query;
+
+    // Convert page and limit parameters to numbers and set default values
+    const pageNumber = Number.parseInt(page, 10) || 1;
+    const pageSize = Number.parseInt(limit, 10) || 10;
+
+    // Calculate the number of followers to skip
+    const skip = (pageNumber - 1) * pageSize;
+
+    // Find the user object with the provided user ID
+    const user = await User.findById(req.cookies.id);
+    if (!user) {
+      return res.status(404).json({ errorMessage: "User not found." });
+    }
+
+    // Get the paginated list of followers
+    const followers = await User.find({ _id: { $in: user.followers } })
+      .skip(skip)
+      .limit(pageSize);
+
+    // Return the paginated list of followers to the client
+    return res.status(200).json({
+      pageNumber,
+      pageSize,
+      totalPages: Math.ceil(user.followers.length / pageSize),
+      totalItems: user.followers.length,
+      items: followers,
+    });
+  } catch (error) {}
+};
+
+module.exports = { addFollower, resetPassword, updateInterest, updateUser, getFollowers };

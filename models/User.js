@@ -16,18 +16,19 @@ const userSchema = new mongoose.Schema(
     githubUrl: { type: String },
     education: { type: String },
     currentJob: { type: String },
-    friends: [
+    followers: [
       {
         user: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "User",
         },
-        status: {
-          type: Number,
-          enums: [
-            0, // 'follower',
-            1, // 'following',
-          ],
+      },
+    ],
+    followings: [
+      {
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
         },
       },
     ],
