@@ -58,6 +58,7 @@ router.post("/delete", auth, async (req, res) => {
   }
 });
 
-router.get("/resetpassword", auth, resetPassword);
-
+router.post("/resetpassword", auth, resetPassword);
+router.post("/update-interest", auth, updateInterest);
+router.post("/update-user", auth, updateUser);
 module.exports = router;

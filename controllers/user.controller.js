@@ -1,5 +1,85 @@
 const User = require("../models/User");
 
+updateUser = async (req, res) => {
+  try {
+    const {
+      firstName,
+      lastName,
+      email,
+      mobileNo,
+      aboutMe,
+      portfolioUrl,
+      facebookUrl,
+      instagramUrl,
+      linkedinUrl,
+      twitterUrl,
+      githubUrl,
+      education,
+      currentJob,
+    } = req.body;
+
+    const user = await User.findOne({ _id: req.cookies.id });
+
+    if (!user) {
+      return res.status(400).json({
+        errorMessage: "Something went wrong!",
+      });
+    }
+    if (email) {
+      if (!firstName) {
+        return res.status(400).json({
+          errorMessage: "User's first name must present.",
+        });
+      }
+      if (!lastName) {
+        return res.status(400).json({
+          errorMessage: "User's last name must present.",
+        });
+      }
+      user.firstName = firstName;
+      user.lastName = lastName;
+    }
+
+    if (mobileNo) {
+      user.mobileNo = mobileNo;
+    }
+    if (aboutMe) {
+      user.aboutMe = aboutMe;
+    }
+    if (portfolioUrl) {
+      user.portfolioUrl = portfolioUrl;
+    }
+    if (facebookUrl) {
+      user.facebookUrl = facebookUrl;
+    }
+    if (instagramUrl) {
+      user.instagramUrl = instagramUrl;
+    }
+    if (linkedinUrl) {
+      user.linkedinUrl = linkedinUrl;
+    }
+    if (twitterUrl) {
+      user.twitterUrl = twitterUrl;
+    }
+    if (githubUrl) {
+      user.githubUrl = githubUrl;
+    }
+    if (education) {
+      user.education = education;
+    }
+    if (currentJob) {
+      user.currentJob = currentJob;
+    }
+    await user.save();
+
+    // Return a success message or the updated user object
+    res.status(200).json({ message: "Profile updated successfully." });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ errorMessage: error });
+  }
+};
+
 addFollower = async (req, res) => {
   // try {
   //   const { name, number } = req.body;
@@ -57,5 +137,23 @@ resetPassword = async (req, res) => {
     res.status(500).send();
   }
 };
+updateInterest = async (req, res) => {
+  try {
+    const { interests } = req.body;
+    const user = await User.findOneAndUpdate(
+      { _id: req.cookies.id },
+      { interests },
+      { new: true }
+    );
+    if (!user) {
+      res.status(404).send("Something went wrong");
+      return;
+    }
+    res.status(200).json({ message: "Interests updated successfully." });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+};
 
-module.exports = { addFollower, resetPassword };
+module.exports = { addFollower, resetPassword, updateInterest, updateUser };
