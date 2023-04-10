@@ -4,11 +4,11 @@ const jwt = require("jsonwebtoken");
 
 register = async (req, res) => {
   try {
-    const { email, password, passwordVerify } = req.body;
+    const { firstName, lastName, mobileNo, email, password, passwordVerify } = req.body;
 
     // validation
 
-    if (!email || !password || !passwordVerify)
+    if (!firstName || !email || !password || !passwordVerify)
       return res
         .status(400)
         .json({ errorMessage: "Please enter all required fields." });
@@ -24,6 +24,7 @@ register = async (req, res) => {
       });
 
     const existingUser = await User.findOne({ email });
+
     if (existingUser)
       return res.status(400).json({
         errorMessage: "An account with this email already exists.",
@@ -37,6 +38,9 @@ register = async (req, res) => {
     // save a new user account to the db
 
     const newUser = new User({
+      firstName,
+      lastName,
+      mobileNo,
       email,
       passwordHash,
     });
@@ -85,7 +89,7 @@ login = async (req, res) => {
 
     const existingUser = await User.findOne({ email });
     if (!existingUser)
-      return res.status(401).json({ errorMessage: "Wrong email or password." });
+      return res.status(401).json({ errorMessage: "Wrong email address." });
 
     const passwordCorrect = await bcrypt.compare(
       password,
