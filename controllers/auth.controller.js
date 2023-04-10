@@ -7,7 +7,7 @@ register = async (req, res) => {
     const { email, password, passwordVerify } = req.body;
 
     // validation
-    
+
     if (!email || !password || !passwordVerify)
       return res
         .status(400)
@@ -142,9 +142,7 @@ loggedIn = (req, res) => {
   try {
     const token = req.cookies.token;
     if (!token) return res.json(false);
-
     jwt.verify(token, process.env.JWT_SECRET);
-
     res.send(true);
   } catch (err) {
     res.json(false);
