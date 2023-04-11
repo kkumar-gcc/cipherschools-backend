@@ -153,4 +153,6 @@ loggedIn = (req, res) => {
   }
 };
 
+
+
 module.exports = { logout, login, register, loggedIn };

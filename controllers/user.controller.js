@@ -189,4 +189,21 @@ getFollowers = async (req, res) => {
   } catch (error) {}
 };
 
-module.exports = { addFollower, resetPassword, updateInterest, updateUser, getFollowers };
+getCurrentUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.cookies.id).select('-passwordHash').exec();
+    res.json(user);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+};
+
+module.exports = {
+  addFollower,
+  resetPassword,
+  updateInterest,
+  updateUser,
+  getFollowers,
+  getCurrentUser,
+};

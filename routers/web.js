@@ -15,6 +15,9 @@ router.get("/loggedIn", loggedIn);
 router.post("/follow", auth, addFollower);
 router.get("/users/followers", auth, getFollowers);
 
+// get current user 
+router.get("/currentUser", auth, getCurrentUser);
+
 //user update routes
 router.post("/resetpassword", auth, resetPassword);
 router.post("/update-interest", auth, updateInterest);
