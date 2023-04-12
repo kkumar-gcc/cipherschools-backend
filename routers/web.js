@@ -13,7 +13,7 @@ router.get("/loggedIn", loggedIn);
 
 // add follower method
 router.post("/follow", auth, addFollower);
-router.get("/users/followers", auth, getFollowers);
+router.get("/user/followers", auth, getFollowers);
 
 // get current user 
 router.get("/currentUser", auth, getCurrentUser);

@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const bcrypt = require("bcryptjs");
 
 updateUser = async (req, res) => {
   try {
@@ -174,7 +175,9 @@ getFollowers = async (req, res) => {
     }
 
     // Get the paginated list of followers
-    const followers = await User.find({ _id: { $in: user.followers } })
+    const followers = await User.find({
+      _id: { $in: user.followers.map((f) => f.user) },
+    })
       .skip(skip)
       .limit(pageSize);
 
@@ -191,7 +194,9 @@ getFollowers = async (req, res) => {
 
 getCurrentUser = async (req, res) => {
   try {
-    const user = await User.findById(req.cookies.id).select('-passwordHash').exec();
+    const user = await User.findById(req.cookies.id)
+      .select("-passwordHash")
+      .exec();
     res.json(user);
   } catch (err) {
     console.error(err);
